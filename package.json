@@ -1,10 +1,10 @@
 {
   "name": "cal-to-al",
-  "displayName": "CAL to AL Converter",
-  "description": "Convert NAV C/AL .txt files to AL Business Central objects.",
-  "version": "2.0.1",
+  "displayName": "CAL to AL",
+  "description": "Migration tool for converting Microsoft Dynamics NAV (C/AL) `.txt` files to Business Central `.al` objects",
+  "version": "3.0.0",
   "publisher": "TAHERElMehdi",
-  "icon": "assets/logo.png",
+  "icon": "assets/icons/logo.png",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -13,12 +13,18 @@
   ],
   "main": "./dist/extension.js",
   "activationEvents": [
-    "onCommand:calToAl.convertSelection"
+    "onView:calToAl.toolbox",
+    "onCommand:calToAl.openWizard",
+    "onCommand:calToAl.runCalPrettier",
+    "onCommand:calToAl.deltaDetails",
+    "onCommand:calToAl.convertFromExplorer"
   ],
   "files": [
     "dist",
     "bin",
     "assets",
+    "src/toolbox/cside-prettier/grammar/cside-nav.tmLanguage.json",
+    "src/toolbox/cside-prettier/grammar/language-configuration-cside.json",
     "package.json"
   ],
   "homepage": "https://github.com/taher-el-mehdi/cal-to-al",
@@ -33,26 +39,129 @@
     "AL",
     "Business Central",
     "Dynamics 365 Business Central",
-    "ERP"
+    "dynamics-365",
+    "Dynamics 365 BC","Dynamics NAV"
   ],
   "contributes": {
+    "languages": [
+      {
+        "id": "cside-nav",
+        "aliases": ["C/AL NAV Export", "C/Side"],
+        "configuration": "./src/toolbox/cside-prettier/grammar/language-configuration-cside.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cside-nav",
+        "scopeName": "source.nav-cal",
+        "path": "./src/toolbox/cside-prettier/grammar/cside-nav.tmLanguage.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[cside-nav]": {
+        "editor.semanticHighlighting.enabled": false,
+        "editor.tokenColorCustomizations": {
+        "textMateRules": [
+          {
+            "scope": ["keyword.control.nav-cal", "keyword.control.object.nav-cal"],
+            "settings": { "foreground": "#C586C0", "fontStyle": "bold" }
+          },
+          {
+            "scope": "keyword.other.section.nav-cal",
+            "settings": { "foreground": "#569CD6" }
+          },
+          {
+            "scope": ["keyword.operator.assignment.nav-cal", "keyword.operator.assignment.property.nav-cal"],
+            "settings": { "foreground": "#D4D4D4", "fontStyle": "bold" }
+          },
+          {
+            "scope": ["support.function.builtin.nav-cal", "entity.name.function.nav-cal", "storage.type.function.nav-cal"],
+            "settings": { "foreground": "#DCDCAA" }
+          },
+          {
+            "scope": ["support.type.nav-cal", "storage.type.object-kind.nav-cal", "entity.name.type.object.nav-cal", "support.type.field-type.nav-cal"],
+            "settings": { "foreground": "#4EC9B0", "fontStyle": "bold" }
+          },
+          {
+            "scope": ["entity.name.tag.field-name.nav-cal", "variable.language.nav-cal", "variable.other.declaration.nav-cal"],
+            "settings": { "foreground": "#9CDCFE" }
+          },
+          {
+            "scope": "string.quoted.single.nav-cal",
+            "settings": { "foreground": "#CE9178" }
+          },
+          {
+            "scope": "comment.line.double-slash.nav-cal",
+            "settings": { "foreground": "#6A9955", "fontStyle": "italic" }
+          },
+          {
+            "scope": [
+              "constant.numeric.integer.nav-cal",
+              "constant.numeric.decimal.nav-cal",
+              "constant.numeric.object-id.nav-cal",
+              "constant.numeric.field-id.nav-cal",
+              "constant.numeric.variable-id.nav-cal"
+            ],
+            "settings": { "foreground": "#B5CEA8" }
+          }
+        ]
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "calToAl",
+          "title": "CAL to AL",
+          "icon": "assets/icons/activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "calToAl": [
+        {
+          "id": "calToAl.toolbox",
+          "name": "Toolbox",
+          "icon": "$(tools)"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "calToAl.convertSelection",
+        "command": "calToAl.openWizard",
+        "title": "Conversion Wizard",
+        "category": "CAL to AL",
+        "icon": "$(wand)"
+      },
+      {
+        "command": "calToAl.runCalPrettier",
+        "title": "C/Side Prettier",
+        "category": "CAL to AL",
+        "icon": "$(symbol-color)"
+      },
+      {
+        "command": "calToAl.deltaDetails",
+        "title": "Delta Details",
+        "category": "CAL to AL",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "calToAl.convertFromExplorer",
         "title": "Convert C/AL to AL",
-        "category": "EMT"
+        "category": "CAL to AL",
+        "icon": "$(run)"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "calToAl.convertSelection",
-          "group": "navigation@1",
+          "command": "calToAl.convertFromExplorer",
+          "group": "navigation@2",
           "when": "resourceExtname == .txt"
         },
         {
-          "command": "calToAl.convertSelection",
-          "group": "navigation@1",
+          "command": "calToAl.convertFromExplorer",
+          "group": "navigation@2",
           "when": "explorerResourceIsFolder && resourceScheme == file"
         }
       ]
@@ -72,27 +181,27 @@
             "Query",
             "XmlPort"
           ],
-          "description": "Convert only a specific object type (--type). Leave empty to convert all types."
+          "description": "Convert only a specific object type. Leave empty to convert all types."
         },
         "calToAl.extensionStartId": {
           "type": "number",
-          "default": 70000000,
-          "description": "Starting numeric ID for extension objects, incremented by 1 for each. Default: 70000000."
+          "default": 50000,
+          "description": "Starting numeric ID for extension objects, incremented by 1 for each. Default: 50000."
         },
         "calToAl.injectDotNetAddIns": {
           "type": "boolean",
           "default": false,
-          "description": "Inject standard .NET add-in definitions into the resulting .NET package (--injectDotNetAddIns)."
+          "description": "Inject standard .NET add-in definitions into the resulting .NET package."
         },
         "calToAl.dotNetAddInsPackage": {
           "type": "string",
           "default": "",
-          "description": "Path to an AL file containing custom .NET type declarations to include in the .NET package (--dotNetAddInsPackage). Leave empty to not set."
+          "description": "Path to an AL file containing custom .NET type declarations to include in the .NET package. Leave empty to not set."
         },
         "calToAl.dotNetTypePrefix": {
           "type": "string",
           "default": "",
-          "description": "Prefix for all .NET type aliases created during conversion (--dotNetTypePrefix). Leave empty to not set."
+          "description": "Prefix for all .NET type aliases created during conversion. Leave empty to not set."
         },
         "calToAl.addLegacyTranslationInfo": {
           "type": "boolean",
@@ -119,7 +228,6 @@
           "default": "",
           "enum": [
             "",
-            "",
             "ToBeClassified",
             "CustomerContent",
             "EndUserIdentifiableInformation",
@@ -140,10 +248,20 @@
           "default": true,
           "description": "Enable verbose logging. Captures full conversion details to the log file."
         },
+        "calToAl.txt2alPath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to Txt2Al.exe. Leave empty to search workspace bin/ and the bundled copy."
+        },
+        "calToAl.logFilePath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path for the conversion log file. Leave empty to use _conversion.log in the output folder."
+        },
         "calToAl.objectMappingPath": {
           "type": "string",
           "default": "",
-          "description": "Path to the object-mapping.json file for resolving numeric object references. Leave empty to use object-mapping.json in the workspace root."
+          "description": "Absolute path to object-mapping.json for post-conversion reference replacement. Leave empty to search default locations."
         }
       }
     }
@@ -152,7 +270,8 @@
     "vscode:prepublish": "npm run build",
     "build": "tsc -p ./",
     "watch": "tsc -w -p ./",
-    "package": "npx vsce package"
+    "package": "npx vsce package",
+    "test": "npm run build && node --test tests/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

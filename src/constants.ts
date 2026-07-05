@@ -1,43 +1,79 @@
 /**
- * Constants and configuration for the CAL to AL converter
+ * Shared identifiers for commands, views, paths, and VS Code setting keys.
+ *
+ * Keep values in sync with `package.json` (`contributes.commands`, `views`, `configuration`).
  */
 
+/** VS Code settings namespace (`calToAl.*`). */
 export const CONFIG_NAMESPACE = 'calToAl';
+
+/** Toolbox TreeView id — must match `package.json` → `contributes.views`. */
+export const TOOLBOX_VIEW_ID = 'calToAl.toolbox';
+
+/** TextMate language id for NAV C/AL `.txt` exports (C/Side Prettier). */
+export const CSIDE_NAV_LANGUAGE_ID = 'cside-nav';
+
+// ── Command ids (must match package.json → contributes.commands) ──────────────
+
+export const CMD_OPEN_WIZARD = 'calToAl.openWizard';
+export const CMD_CAL_PRETTIER = 'calToAl.runCalPrettier';
+export const CMD_DELTA_DETAILS = 'calToAl.deltaDetails';
+/** Explorer context menu: convert selected `.txt` files or folders. */
+export const CMD_CONVERT_FROM_EXPLORER = 'calToAl.convertFromExplorer';
+
+// ── Bundled tool file names ───────────────────────────────────────────────────
 
 export const EXECUTABLE_NAMES = {
   TXT2AL_WINDOWS: 'Txt2Al.exe',
-};
+} as const;
+
+// ── Directory and file names used at runtime ──────────────────────────────────
 
 export const DIRECTORY_NAMES = {
+  /** Workspace-relative folder searched for Txt2Al.exe and object-mapping.json. */
   WORKSPACE_BIN: 'bin',
+  /** Default AL output folder under the workspace root. */
   AL_OUTPUT: 'src-cal-to-al',
+  /** Staging folder for explorer multi-file conversions (removed after run). */
   TEMP_CONVERSION: '.caltoal-temp',
   OBJECT_MAPPING_FILE: 'object-mapping.json',
-};
+  /** Bundled Txt2Al.exe folder under the extension `bin/` directory. */
+  TXT2AL_TOOLS: 'txt2al',
+  /** Bundled NAV 2016 Model Tools (PowerShell delta comparison). */
+  NAV_MODEL_TOOLS: '90',
+  /** Wizard temp root under the OS temp directory. */
+  WIZARD_TEMP_ROOT: 'cal-to-al',
+  /** Delta subfolder produced by Compare-NAVApplicationObject. */
+  WIZARD_DELTA: 'Delta',
+} as const;
+
+export const NAV_MODEL_TOOLS = {
+  SCRIPT: 'NavModelTools.ps1',
+} as const;
 
 export const FILE_NAMES = {
   CONVERSION_LOG: '_conversion.log',
-};
+} as const;
 
+/**
+ * Keys for `vscode.workspace.getConfiguration(CONFIG_NAMESPACE)`.
+ *
+ * Each key maps to a `calToAl.<key>` setting and (when applicable) a txt2al CLI flag.
+ */
 export const CONVERSION_SETTINGS = {
-  rename: 'rename',
   type: 'type',
   extensionStartId: 'extensionStartId',
-  stacktrace: 'stacktrace',
   injectDotNetAddIns: 'injectDotNetAddIns',
   dotNetAddInsPackage: 'dotNetAddInsPackage',
-  multithreaded: 'multithreaded',
   dotNetTypePrefix: 'dotNetTypePrefix',
-  translationFormat: 'translationFormat',
   addLegacyTranslationInfo: 'addLegacyTranslationInfo',
   runtime: 'runtime',
   objectFileNamePattern: 'objectFileNamePattern',
   extensionObjectFileNamePattern: 'extensionObjectFileNamePattern',
-  format: 'format',
   dataClassificationDefaulting: 'dataClassificationDefaulting',
   tableDataOnly: 'tableDataOnly',
   txt2alPath: 'txt2alPath',
   logFilePath: 'logFilePath',
   objectMappingPath: 'objectMappingPath',
   verboseLogging: 'verboseLogging',
-};
+} as const;

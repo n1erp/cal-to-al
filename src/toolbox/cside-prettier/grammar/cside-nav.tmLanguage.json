@@ -1,0 +1,209 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "NAV C/AL (Classic Export)",
+    "scopeName": "source.nav-cal",
+    "fileTypes": ["txt", "del"],
+    "foldingStartMarker": "^\\s*(OBJECT-PROPERTIES|PROPERTIES|FIELDS|KEYS|FIELDGROUPS|CONTROLS|ACTIONS|DATASET|ELEMENTS|EVENTS|REQUESTPAGE|LABELS|CODE|RDLDATA)\\b\\s*$|\\{\\s*$|\\b(BEGIN|CASE|REPEAT|VAR)\\b\\s*$",
+    "foldingStopMarker": "^\\s*\\}\\s*$|\\b(END|UNTIL)\\b\\s*;?\\s*$",
+  
+    "patterns": [
+      { "include": "#object-header" },
+      { "include": "#comments" },
+      { "include": "#rdldata-block" },
+      { "include": "#guid-literal" },
+      { "include": "#section-keywords" },
+      { "include": "#procedure-declaration" },
+      { "include": "#variable-declaration" },
+      { "include": "#field-row" },
+      { "include": "#property-assignment" },
+      { "include": "#language-tag" },
+      { "include": "#quoted-identifier" },
+      { "include": "#strings" },
+      { "include": "#numbers" },
+      { "include": "#builtin-variables" },
+      { "include": "#control-keywords" },
+      { "include": "#logical-operators" },
+      { "include": "#assignment-operator" },
+      { "include": "#comparison-operators" },
+      { "include": "#arithmetic-operators" },
+      { "include": "#builtin-datatypes" },
+      { "include": "#builtin-functions" },
+      { "include": "#parens" }
+    ],
+  
+    "repository": {
+  
+      "object-header": {
+        "comment": "OBJECT <Kind> <Id> <Name>",
+        "match": "^\\s*(OBJECT)\\s+(Table|Page|Report|Codeunit|Query|XMLport|MenuSuite|Dataport|Form)\\s+(\\d+)\\s+(.+?)\\s*$",
+        "captures": {
+          "1": { "name": "keyword.control.object.nav-cal" },
+          "2": { "name": "storage.type.object-kind.nav-cal" },
+          "3": { "name": "constant.numeric.object-id.nav-cal" },
+          "4": { "name": "entity.name.type.object.nav-cal" }
+        }
+      },
+  
+      "comments": {
+        "patterns": [
+          { "match": "//.*$", "name": "comment.line.double-slash.nav-cal" }
+        ]
+      },
+  
+      "section-keywords": {
+        "comment": "Block headers that appear alone on their own line",
+        "match": "^\\s*\\b(OBJECT-PROPERTIES|PROPERTIES|FIELDS|KEYS|FIELDGROUPS|CONTROLS|ACTIONS|DATASET|ELEMENTS|EVENTS|REQUESTPAGE|LABELS|CODE|RDLDATA)\\b\\s*$",
+        "name": "keyword.other.section.nav-cal"
+      },
+  
+      "rdldata-block": {
+        "comment": "Report RDL is raw XML embedded between RDLDATA { ... END_OF_RDLDATA }; hand off to the built-in XML grammar",
+        "begin": "\\b(RDLDATA)\\b\\s*(\\{)",
+        "beginCaptures": {
+          "1": { "name": "keyword.other.section.nav-cal" },
+          "2": { "name": "punctuation.section.block.begin.nav-cal" }
+        },
+        "end": "(\\})",
+        "endCaptures": {
+          "1": { "name": "punctuation.section.block.end.nav-cal" }
+        },
+        "patterns": [
+          {
+            "begin": "(?=<\\?xml)",
+            "end": "(?=\\s*END_OF_RDLDATA)",
+            "patterns": [{ "include": "text.xml" }]
+          },
+          { "match": "\\bEND_OF_RDLDATA\\b", "name": "keyword.control.nav-cal" }
+        ]
+      },
+  
+      "guid-literal": {
+        "comment": "XMLport element ids: [{8-4-4-4-12}]",
+        "match": "\\[\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\}\\]",
+        "name": "constant.other.guid.nav-cal"
+      },
+  
+      "procedure-declaration": {
+        "comment": "PROCEDURE/TRIGGER/LOCAL PROCEDURE Name@id(...)",
+        "match": "\\b(LOCAL\\s+PROCEDURE|PROCEDURE|TRIGGER)\\b\\s+([A-Za-z_][A-Za-z0-9_]*|\"[^\"]+\")\\s*(@)?(\\d+)?",
+        "captures": {
+          "1": { "name": "storage.type.function.nav-cal" },
+          "2": { "name": "entity.name.function.nav-cal" },
+          "3": { "name": "punctuation.separator.at.nav-cal" },
+          "4": { "name": "constant.numeric.variable-id.nav-cal" }
+        }
+      },
+  
+      "variable-declaration": {
+        "comment": "VAR/parameter declarations: Name@id : Type[Length]",
+        "match": "(\"[^\"]+\"|[A-Za-z_][A-Za-z0-9_]*)\\s*(@)(\\d+)\\s*(:)\\s*([A-Za-z][A-Za-z0-9_]*)(\\[\\s*\\d+\\s*\\])?",
+        "captures": {
+          "1": { "name": "variable.other.declaration.nav-cal" },
+          "2": { "name": "punctuation.separator.at.nav-cal" },
+          "3": { "name": "constant.numeric.variable-id.nav-cal" },
+          "4": { "name": "punctuation.separator.colon.nav-cal" },
+          "5": { "name": "support.type.nav-cal" },
+          "6": { "name": "constant.numeric.length.nav-cal" }
+        }
+      },
+  
+      "field-row": {
+        "comment": "Table field rows: { id ; ; Name ; Type ; properties }",
+        "match": "^\\s*\\{\\s*(\\d+)\\s*;\\s*;\\s*(\"[^\"]+\"|[^;]+?)\\s*;\\s*([A-Za-z][A-Za-z0-9]*)\\s*;",
+        "captures": {
+          "1": { "name": "constant.numeric.field-id.nav-cal" },
+          "2": { "name": "entity.name.tag.field-name.nav-cal" },
+          "3": { "name": "support.type.field-type.nav-cal" }
+        }
+      },
+  
+      "property-assignment": {
+        "comment": "Key=Value; property lines inside PROPERTIES/CONTROLS/ACTIONS/ELEMENTS blocks",
+        "match": "^\\s*([A-Za-z][A-Za-z0-9 ]*)(=)",
+        "captures": {
+          "1": { "name": "entity.other.attribute-name.nav-cal" },
+          "2": { "name": "keyword.operator.assignment.property.nav-cal" }
+        }
+      },
+  
+      "language-tag": {
+        "comment": "Locale tags inside ML properties: CaptionML=[ENU=...;FRA=...]",
+        "match": "\\b(ENU|ENG|ENC|FRA|DEU|ESP|ITA|NLD|DAN|NOR|SVE)(?=\\s*=)",
+        "name": "constant.language.locale.nav-cal"
+      },
+  
+      "quoted-identifier": {
+        "comment": "Double-quoted identifiers (field/variable names containing spaces or reserved words) - NOT string literals",
+        "match": "\"[^\"]*\"",
+        "name": "variable.other.quoted.nav-cal"
+      },
+  
+      "strings": {
+        "comment": "Text literals use single quotes; a literal quote is escaped by doubling it (''), not backslash",
+        "name": "string.quoted.single.nav-cal",
+        "begin": "'",
+        "end": "'",
+        "patterns": [
+          { "match": "''", "name": "constant.character.escape.nav-cal" }
+        ]
+      },
+  
+      "numbers": {
+        "patterns": [
+          { "match": "\\b\\d+\\.\\d+\\b", "name": "constant.numeric.decimal.nav-cal" },
+          { "match": "\\b\\d+(?=[Dd]\\b)", "name": "constant.numeric.datetime.nav-cal" },
+          { "match": "\\b\\d+(?=[Ll]\\b)", "name": "constant.numeric.biginteger.nav-cal" },
+          { "match": "\\b\\d+\\b", "name": "constant.numeric.integer.nav-cal" }
+        ]
+      },
+  
+      "builtin-variables": {
+        "match": "\\b(Rec|xRec|CurrPage|CurrReport|RequestOptionsPage)\\b",
+        "name": "variable.language.nav-cal"
+      },
+  
+      "control-keywords": {
+        "match": "(?i)\\b(BEGIN|END|IF|THEN|ELSE|CASE|OF|REPEAT|UNTIL|WHILE|DO|FOR|TO|DOWNTO|FOREACH|WITH|VAR|EXIT|EVENT|ASSERTERROR|LOCAL|TRUE|FALSE)\\b",
+        "name": "keyword.control.nav-cal"
+      },
+  
+      "logical-operators": {
+        "match": "(?i)\\b(AND|OR|NOT|XOR|IN|DIV|MOD)\\b",
+        "name": "keyword.operator.logical.nav-cal"
+      },
+  
+      "assignment-operator": {
+        "match": ":=",
+        "name": "keyword.operator.assignment.nav-cal"
+      },
+  
+      "comparison-operators": {
+        "match": "<>|<=|>=|<|>|=",
+        "name": "keyword.operator.comparison.nav-cal"
+      },
+  
+      "arithmetic-operators": {
+        "match": "\\+|\\-|\\*|/",
+        "name": "keyword.operator.arithmetic.nav-cal"
+      },
+  
+      "builtin-datatypes": {
+        "match": "\\b(Action|Automation|BigInteger|BigText|Binary|BLOB|Boolean|Char|Code|Codeunit|Date|DateFormula|DateTime|Decimal|Dialog|Duration|FieldRef|File|GUID|InStream|Integer|KeyRef|OCX|Option|OutStream|Page|Query|Record|RecordID|RecordRef|Report|TableFilter|Text|Time|TransactionType|Variant|XMLport)\\b",
+        "name": "support.type.nav-cal"
+      },
+  
+      "builtin-functions": {
+        "comment": "Standard C/AL runtime methods (finite, language-defined names)",
+        "match": "(?i)\\b(ABS|ACTIVATE|ADDLINK|APPLICATIONPATH|ARRAYLEN|ASCENDING|BEEP|CALCDATE|CALCFIELDS|CALCSUMS|CAPTION|CHANGECOMPANY|CLEAR|CLEARALL|CLEARMARKS|CLOSE|CODEUNIT.RUN|COMMIT|COMPANYNAME|CONFIRM|CONVERTSTR|COPY|COPYSTR|COUNT|CREATEGUID|CURRENTDATETIME|DATE2DMY|DELCHR|DELETE|DELETEALL|DELSTR|DIALOG|DOWNLOAD|ERROR|EVALUATE|EXISTS|EXPORT|FIELDCAPTION|FIELDNO|FIND|FINDFIRST|FINDLAST|FINDSET|FORMAT|GET|GETFILTER|GETFILTERS|GETLASTERRORTEXT|GETPOSITION|GETRANGEMIN|GETRANGEMAX|GUIALLOWED|HYPERLINK|IMPORT|INSERT|INSTR|ISEMPTY|LOCKTABLE|LOWERCASE|MARK|MARKEDONLY|MESSAGE|MODIFY|MODIFYALL|NEXT|PAGE.RUN|PAGE.RUNMODAL|RENAME|RESET|ROUND|RUN|RUNMODAL|SAVEASEXCEL|SAVEASPDF|SAVEASXML|SELECTSTR|SETCURRENTKEY|SETFILTER|SETRANGE|SETRECFILTER|SETVIEW|SHOWCAPTION|SKIP|STRLEN|STRMENU|STRPOS|STRSUBSTNO|TABLECAPTION|TESTFIELD|TODAY|TRANSFERFIELDS|TYPE|UPPERCASE|VALIDATE|VALUE|WORKDATE)\\b",
+        "name": "support.function.builtin.nav-cal"
+      },
+  
+      "parens": {
+        "begin": "\\(",
+        "end": "\\)",
+        "patterns": [{ "include": "$self" }]
+      }
+  
+    }
+  }
+  

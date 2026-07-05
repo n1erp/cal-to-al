@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.0.0] - 2026-07-06
+
+### ✨ Added
+- Activity Bar container **C/AL → AL** with a dedicated toolbox TreeView.
+- **C/Side Prettier** toolbox entry for working with NAV C/AL export files.
+- **Conversion Wizard** webview in the sidebar for guided txt2al conversion setup.
+- **Delta Details** tool to compare two object export files side by side using Diff Match Patch.
+- Contributor guide (`src/conversionService.README.md`).
+- Conversion Wizard **Settings** tab for all `calToAl.*` configuration options.
+
+
+---
+
 ## [2.0.0] - 2026-06-01
 
 ### ✨ Added

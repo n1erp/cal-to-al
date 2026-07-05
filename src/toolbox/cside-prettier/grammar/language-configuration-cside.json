@@ -1,0 +1,31 @@
+{
+  "comments": {
+    "lineComment": "//"
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"", "notIn": ["string"] },
+    { "open": "'", "close": "'", "notIn": ["string", "comment"] }
+  ],
+  "surroundingPairs": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""],
+    ["'", "'"]
+  ],
+  "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)",
+  "folding": {
+    "markers": {
+      "start": "^\\s*(OBJECT-PROPERTIES|PROPERTIES|FIELDS|KEYS|FIELDGROUPS|CONTROLS|ACTIONS|DATASET|ELEMENTS|EVENTS|REQUESTPAGE|LABELS|CODE|RDLDATA)\\b\\s*$|\\{\\s*$|\\b(BEGIN|CASE|REPEAT|VAR|PROCEDURE|TRIGGER)\\b\\s*$",
+      "end": "^\\s*\\}\\s*$|\\b(END|UNTIL)\\b\\s*;?\\s*$"
+    }
+  }
+}

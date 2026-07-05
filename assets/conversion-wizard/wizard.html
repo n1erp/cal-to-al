@@ -1,0 +1,212 @@
+<main class="wizard">
+  <header class="wizard-header">
+    <h1>Conversion Wizard</h1>
+    <p class="subtitle">
+      Generate an AL extension from Microsoft Dynamics NAV object exports — compare standard vs customized objects, then convert the delta automatically.
+    </p>
+  </header>
+
+  <nav class="tab-bar" role="tablist" aria-label="Wizard sections">
+    <button type="button" class="tab active" role="tab" id="tab-conversion" aria-selected="true" aria-controls="panel-conversion">Conversion</button>
+    <button type="button" class="tab" role="tab" id="tab-settings" aria-selected="false" aria-controls="panel-settings">Settings</button>
+  </nav>
+
+  <section id="panel-conversion" class="tab-panel active" role="tabpanel" aria-labelledby="tab-conversion">
+    <ol class="steps" aria-label="Wizard steps">
+      <li class="step card">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">1</span>
+          <h2 id="step1-heading">Standard NAV Objects</h2>
+        </div>
+        <div class="field">
+          <label for="inputStandard">Standard objects export <span class="required">*</span></label>
+          <div class="field-row">
+            <input type="text" id="inputStandard" placeholder="e.g. C:\Exports\All_Obj_STANDARD_NAV2018.txt" autocomplete="off" required />
+            <button type="button" class="secondary" data-browse="inputStandard">Browse…</button>
+          </div>
+          <span class="hint">Microsoft standard NAV objects export (<code>*.txt</code>).</span>
+        </div>
+      </li>
+
+      <li class="step card">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">2</span>
+          <h2 id="step2-heading">Customized NAV Objects</h2>
+        </div>
+        <div class="field">
+          <label for="inputCustomized">Customized objects export <span class="required">*</span></label>
+          <div class="field-row">
+            <input type="text" id="inputCustomized" placeholder="e.g. C:\Exports\All_Obj_CUSTOMER_NAV2018.txt" autocomplete="off" required />
+            <button type="button" class="secondary" data-browse="inputCustomized">Browse…</button>
+          </div>
+          <span class="hint">Your customized NAV objects export (<code>*.txt</code>).</span>
+        </div>
+      </li>
+
+      <li class="step card">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">3</span>
+          <h2 id="step3-heading">Output Folder</h2>
+        </div>
+        <div class="field">
+          <label for="outputFile">AL extension output folder <span class="required">*</span></label>
+          <div class="field-row">
+            <input type="text" id="outputFile" placeholder="e.g. C:\Projects\CustomerExtension" autocomplete="off" required />
+            <button type="button" class="secondary" data-browse="outputFile">Browse…</button>
+          </div>
+          <span class="hint">Folder where generated <code>.al</code> files will be written.</span>
+        </div>
+      </li>
+    </ol>
+
+    <section class="card actions" aria-label="Actions">
+      <button type="button" id="convertBtn" class="primary large" disabled>Generate AL Extension</button>
+      <div class="secondary-actions">
+        <button type="button" id="viewLogBtn" class="secondary">View log</button>
+        <button type="button" id="closeBtn" class="secondary">Close tab</button>
+      </div>
+    </section>
+  </section>
+
+  <section id="panel-settings" class="tab-panel" role="tabpanel" aria-labelledby="tab-settings" hidden>
+    <div class="settings-grid">
+      <div class="card settings-group">
+        <h2>Conversion options</h2>
+
+        <div class="field">
+          <label for="setting-type">Object type</label>
+          <select id="setting-type" data-setting="type">
+            <option value="">All types</option>
+            <option value="Codeunit">Codeunit</option>
+            <option value="Table">Table</option>
+            <option value="Page">Page</option>
+            <option value="Report">Report</option>
+            <option value="Query">Query</option>
+            <option value="XmlPort">XmlPort</option>
+          </select>
+          <span class="hint">Convert only one object type, or leave as all types.</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-extensionStartId">Extension start ID</label>
+          <input type="number" id="setting-extensionStartId" data-setting="extensionStartId" min="1" step="1" />
+          <span class="hint">Starting numeric ID for extension objects (default: 50000).</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-runtime">AL runtime</label>
+          <input type="text" id="setting-runtime" data-setting="runtime" placeholder="e.g. 15.0" autocomplete="off" />
+          <span class="hint">Target AL runtime version. Leave empty for latest supported.</span>
+        </div>
+
+        <div class="field checkbox-field">
+          <label><input type="checkbox" id="setting-tableDataOnly" data-setting="tableDataOnly" /> Table data only</label>
+          <span class="hint">For tables, convert only table and field definitions (no methods/triggers).</span>
+        </div>
+
+        <div class="field checkbox-field">
+          <label><input type="checkbox" id="setting-verboseLogging" data-setting="verboseLogging" /> Verbose logging</label>
+          <span class="hint">Full conversion details in the log file and stack traces in txt2al.</span>
+        </div>
+      </div>
+
+      <div class="card settings-group">
+        <h2>File naming</h2>
+
+        <div class="field">
+          <label for="setting-objectFileNamePattern">Object file name pattern</label>
+          <input type="text" id="setting-objectFileNamePattern" data-setting="objectFileNamePattern" autocomplete="off" />
+          <span class="hint">Placeholders: <code>{name}</code>, <code>{type}</code>, <code>{id}</code>.</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-extensionObjectFileNamePattern">Extension object file name pattern</label>
+          <input type="text" id="setting-extensionObjectFileNamePattern" data-setting="extensionObjectFileNamePattern" autocomplete="off" />
+          <span class="hint">Also supports <code>{targetName}</code> and <code>{targetId}</code>.</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-dataClassificationDefaulting">Data classification default</label>
+          <select id="setting-dataClassificationDefaulting" data-setting="dataClassificationDefaulting">
+            <option value="">Not set</option>
+            <option value="ToBeClassified">ToBeClassified</option>
+            <option value="CustomerContent">CustomerContent</option>
+            <option value="EndUserIdentifiableInformation">EndUserIdentifiableInformation</option>
+            <option value="AccountData">AccountData</option>
+            <option value="EndUserPseudonymousIdentifiers">EndUserPseudonymousIdentifiers</option>
+            <option value="OrganizationIdentifiableInformation">OrganizationIdentifiableInformation</option>
+            <option value="SystemMetadata">SystemMetadata</option>
+          </select>
+          <span class="hint">Default DataClassification for table fields without one.</span>
+        </div>
+      </div>
+
+       <!-- <div class="card settings-group">
+        <h2>.NET and translations</h2>
+
+        <div class="field checkbox-field">
+          <label><input type="checkbox" id="setting-injectDotNetAddIns" data-setting="injectDotNetAddIns" /> Inject .NET add-ins</label>
+          <span class="hint">Inject standard .NET add-in definitions into the .NET package.</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-dotNetAddInsPackage">.NET add-ins package</label>
+          <div class="field-row">
+            <input type="text" id="setting-dotNetAddInsPackage" data-setting="dotNetAddInsPackage" placeholder="Path to .al file" autocomplete="off" />
+            <button type="button" class="secondary" data-browse="dotNetAddInsPackage">Browse…</button>
+          </div>
+          <span class="hint">AL file with custom .NET type declarations (optional).</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-dotNetTypePrefix">.NET type prefix</label>
+          <input type="text" id="setting-dotNetTypePrefix" data-setting="dotNetTypePrefix" autocomplete="off" />
+          <span class="hint">Prefix for .NET type aliases created during conversion.</span>
+        </div>
+
+        <div class="field checkbox-field">
+          <label><input type="checkbox" id="setting-addLegacyTranslationInfo" data-setting="addLegacyTranslationInfo" /> Legacy translation info</label>
+          <span class="hint">Add legacy translation mapping info to translation files.</span>
+        </div>
+      </div>
+
+     <div class="card settings-group">
+        <h2>Tools and paths</h2>
+
+        <div class="field">
+          <label for="setting-txt2alPath">Txt2Al.exe path</label>
+          <div class="field-row">
+            <input type="text" id="setting-txt2alPath" data-setting="txt2alPath" placeholder="Leave empty for bundled copy" autocomplete="off" />
+            <button type="button" class="secondary" data-browse="txt2alPath">Browse…</button>
+          </div>
+          <span class="hint">Override path to Txt2Al.exe.</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-objectMappingPath">object-mapping.json path</label>
+          <div class="field-row">
+            <input type="text" id="setting-objectMappingPath" data-setting="objectMappingPath" autocomplete="off" />
+            <button type="button" class="secondary" data-browse="objectMappingPath">Browse…</button>
+          </div>
+          <span class="hint">Post-conversion reference replacement map.</span>
+        </div>
+
+        <div class="field">
+          <label for="setting-logFilePath">Conversion log path</label>
+          <div class="field-row">
+            <input type="text" id="setting-logFilePath" data-setting="logFilePath" placeholder="Default: _conversion.log in output folder" autocomplete="off" />
+            <button type="button" class="secondary" data-browse="logFilePath">Browse…</button>
+          </div>
+          <span class="hint">Custom log file location (optional).</span>
+        </div>
+      </div>
+       -->
+    </div>
+
+    <section class="card actions settings-actions" aria-label="Settings actions">
+      <button type="button" id="saveSettingsBtn" class="primary large">Save settings</button>
+    </section>
+  </section>
+
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+</main>
