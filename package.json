@@ -1,8 +1,8 @@
 {
   "name": "cal-to-al",
   "displayName": "CAL to AL",
-  "description": "Migration tool for converting Microsoft Dynamics NAV (C/AL) `.txt` files to Business Central `.al` objects",
-  "version": "3.0.0",
+  "description": "Migration toolkit for Microsoft Dynamics NAV / Business Central: C/AL to AL conversion plus SQL-based data migration studio",
+  "version": "4.0.0",
   "publisher": "TAHERElMehdi",
   "icon": "assets/icons/logo.png",
   "engines": {
@@ -14,6 +14,7 @@
   "main": "./dist/extension.js",
   "activationEvents": [
     "onView:calToAl.toolbox",
+    "onView:calToAl.sqlExplorer",
     "onCommand:calToAl.openWizard",
     "onCommand:calToAl.runCalPrettier",
     "onCommand:calToAl.deltaDetails",
@@ -40,13 +41,17 @@
     "Business Central",
     "Dynamics 365 Business Central",
     "dynamics-365",
-    "Dynamics 365 BC","Dynamics NAV"
+    "Dynamics 365 BC",
+    "Dynamics NAV"
   ],
   "contributes": {
     "languages": [
       {
         "id": "cside-nav",
-        "aliases": ["C/AL NAV Export", "C/Side"],
+        "aliases": [
+          "C/AL NAV Export",
+          "C/Side"
+        ],
         "configuration": "./src/toolbox/cside-prettier/grammar/language-configuration-cside.json"
       }
     ],
@@ -61,50 +66,91 @@
       "[cside-nav]": {
         "editor.semanticHighlighting.enabled": false,
         "editor.tokenColorCustomizations": {
-        "textMateRules": [
-          {
-            "scope": ["keyword.control.nav-cal", "keyword.control.object.nav-cal"],
-            "settings": { "foreground": "#C586C0", "fontStyle": "bold" }
-          },
-          {
-            "scope": "keyword.other.section.nav-cal",
-            "settings": { "foreground": "#569CD6" }
-          },
-          {
-            "scope": ["keyword.operator.assignment.nav-cal", "keyword.operator.assignment.property.nav-cal"],
-            "settings": { "foreground": "#D4D4D4", "fontStyle": "bold" }
-          },
-          {
-            "scope": ["support.function.builtin.nav-cal", "entity.name.function.nav-cal", "storage.type.function.nav-cal"],
-            "settings": { "foreground": "#DCDCAA" }
-          },
-          {
-            "scope": ["support.type.nav-cal", "storage.type.object-kind.nav-cal", "entity.name.type.object.nav-cal", "support.type.field-type.nav-cal"],
-            "settings": { "foreground": "#4EC9B0", "fontStyle": "bold" }
-          },
-          {
-            "scope": ["entity.name.tag.field-name.nav-cal", "variable.language.nav-cal", "variable.other.declaration.nav-cal"],
-            "settings": { "foreground": "#9CDCFE" }
-          },
-          {
-            "scope": "string.quoted.single.nav-cal",
-            "settings": { "foreground": "#CE9178" }
-          },
-          {
-            "scope": "comment.line.double-slash.nav-cal",
-            "settings": { "foreground": "#6A9955", "fontStyle": "italic" }
-          },
-          {
-            "scope": [
-              "constant.numeric.integer.nav-cal",
-              "constant.numeric.decimal.nav-cal",
-              "constant.numeric.object-id.nav-cal",
-              "constant.numeric.field-id.nav-cal",
-              "constant.numeric.variable-id.nav-cal"
-            ],
-            "settings": { "foreground": "#B5CEA8" }
-          }
-        ]
+          "textMateRules": [
+            {
+              "scope": [
+                "keyword.control.nav-cal",
+                "keyword.control.object.nav-cal"
+              ],
+              "settings": {
+                "foreground": "#C586C0",
+                "fontStyle": "bold"
+              }
+            },
+            {
+              "scope": "keyword.other.section.nav-cal",
+              "settings": {
+                "foreground": "#569CD6"
+              }
+            },
+            {
+              "scope": [
+                "keyword.operator.assignment.nav-cal",
+                "keyword.operator.assignment.property.nav-cal"
+              ],
+              "settings": {
+                "foreground": "#D4D4D4",
+                "fontStyle": "bold"
+              }
+            },
+            {
+              "scope": [
+                "support.function.builtin.nav-cal",
+                "entity.name.function.nav-cal",
+                "storage.type.function.nav-cal"
+              ],
+              "settings": {
+                "foreground": "#DCDCAA"
+              }
+            },
+            {
+              "scope": [
+                "support.type.nav-cal",
+                "storage.type.object-kind.nav-cal",
+                "entity.name.type.object.nav-cal",
+                "support.type.field-type.nav-cal"
+              ],
+              "settings": {
+                "foreground": "#4EC9B0",
+                "fontStyle": "bold"
+              }
+            },
+            {
+              "scope": [
+                "entity.name.tag.field-name.nav-cal",
+                "variable.language.nav-cal",
+                "variable.other.declaration.nav-cal"
+              ],
+              "settings": {
+                "foreground": "#9CDCFE"
+              }
+            },
+            {
+              "scope": "string.quoted.single.nav-cal",
+              "settings": {
+                "foreground": "#CE9178"
+              }
+            },
+            {
+              "scope": "comment.line.double-slash.nav-cal",
+              "settings": {
+                "foreground": "#6A9955",
+                "fontStyle": "italic"
+              }
+            },
+            {
+              "scope": [
+                "constant.numeric.integer.nav-cal",
+                "constant.numeric.decimal.nav-cal",
+                "constant.numeric.object-id.nav-cal",
+                "constant.numeric.field-id.nav-cal",
+                "constant.numeric.variable-id.nav-cal"
+              ],
+              "settings": {
+                "foreground": "#B5CEA8"
+              }
+            }
+          ]
         }
       }
     },
@@ -120,12 +166,25 @@
     "views": {
       "calToAl": [
         {
+          "id": "calToAl.sqlExplorer",
+          "name": "SQL Explorer",
+          "icon": "$(database)",
+          "visibility": "visible"
+        },
+        {
           "id": "calToAl.toolbox",
           "name": "Toolbox",
-          "icon": "$(tools)"
+          "icon": "$(tools)",
+          "visibility": "visible"
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "calToAl.sqlExplorer",
+        "contents": "Connect to a Microsoft SQL Server database to browse tables, preview data, and prepare migrations.\n[Add SQL Connection](command:calToAl.sql.addConnection)"
+      }
+    ],
     "commands": [
       {
         "command": "calToAl.openWizard",
@@ -150,6 +209,72 @@
         "title": "Convert C/AL to AL",
         "category": "CAL to AL",
         "icon": "$(run)"
+      },
+      {
+        "command": "calToAl.sql.openExplorer",
+        "title": "SQL Explorer",
+        "category": "CAL to AL",
+        "icon": "$(database)"
+      },
+      {
+        "command": "calToAl.sql.addConnection",
+        "title": "Add SQL Connection",
+        "category": "CAL to AL",
+        "icon": "$(add)"
+      },
+      {
+        "command": "calToAl.sql.editConnection",
+        "title": "Edit SQL Connection",
+        "category": "CAL to AL",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "calToAl.sql.deleteConnection",
+        "title": "Delete SQL Connection",
+        "category": "CAL to AL",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "calToAl.sql.refreshExplorer",
+        "title": "Refresh SQL Explorer",
+        "category": "CAL to AL",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "calToAl.sql.previewTable",
+        "title": "Preview Data",
+        "category": "CAL to AL",
+        "icon": "$(table)"
+      },
+      {
+        "command": "calToAl.sql.exportTable",
+        "title": "Export Data (CSV / Excel / JSON)",
+        "category": "CAL to AL",
+        "icon": "$(export)"
+      },
+      {
+        "command": "calToAl.sql.compareDatabases",
+        "title": "Database Comparison",
+        "category": "CAL to AL",
+        "icon": "$(compare-changes)"
+      },
+      {
+        "command": "calToAl.sql.createDatabaseComparison",
+        "title": "Create Database Comparison",
+        "category": "CAL to AL",
+        "icon": "$(compare-changes)"
+      },
+      {
+        "command": "calToAl.sql.createMigrationPlan",
+        "title": "Create Migration Plan",
+        "category": "CAL to AL",
+        "icon": "$(map)"
+      },
+      {
+        "command": "calToAl.sql.openMigrationDashboard",
+        "title": "Migration Dashboard",
+        "category": "CAL to AL",
+        "icon": "$(rocket)"
       }
     ],
     "menus": {
@@ -163,6 +288,40 @@
           "command": "calToAl.convertFromExplorer",
           "group": "navigation@2",
           "when": "explorerResourceIsFolder && resourceScheme == file"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "calToAl.sql.addConnection",
+          "when": "view == calToAl.sqlExplorer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "calToAl.sql.refreshExplorer",
+          "when": "view == calToAl.sqlExplorer",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "calToAl.sql.editConnection",
+          "when": "view == calToAl.sqlExplorer && viewItem == sqlConnection",
+          "group": "1_manage@1"
+        },
+        {
+          "command": "calToAl.sql.deleteConnection",
+          "when": "view == calToAl.sqlExplorer && viewItem == sqlConnection",
+          "group": "1_manage@2"
+        },
+        {
+          "command": "calToAl.sql.previewTable",
+          "when": "view == calToAl.sqlExplorer && (viewItem == sqlTable || viewItem == sqlView)",
+          "group": "1_data@1"
+        },
+        {
+          "command": "calToAl.sql.exportTable",
+          "when": "view == calToAl.sqlExplorer && (viewItem == sqlTable || viewItem == sqlView)",
+          "group": "1_data@2"
         }
       ]
     },
@@ -262,20 +421,43 @@
           "type": "string",
           "default": "",
           "description": "Absolute path to object-mapping.json for post-conversion reference replacement. Leave empty to search default locations."
+        },
+        "dataMigration.batchSize": {
+          "type": "number",
+          "default": 5000,
+          "description": "Row batch size for cross-server bulk copies. Larger batches are faster but use more memory."
+        },
+        "dataMigration.queryTimeoutSeconds": {
+          "type": "number",
+          "default": 600,
+          "description": "SQL request timeout in seconds for migration queries."
+        },
+        "dataMigration.planFolder": {
+          "type": "string",
+          "default": "",
+          "description": "Folder for migration-plan.json and mappings.json. Leave empty to use .cal2al/ in the workspace root."
         }
       }
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
-    "build": "tsc -p ./",
-    "watch": "tsc -w -p ./",
+    "build": "npm run check-types && npm run bundle",
+    "check-types": "tsc -p ./ --noEmit",
+    "bundle": "esbuild src/extension.ts --bundle --platform=node --external:vscode --outfile=dist/extension.js --sourcemap",
+    "watch": "tsc -w -p ./ --noEmit",
     "package": "npx vsce package",
     "test": "npm run build && node --test tests/*.test.js"
   },
   "devDependencies": {
+    "@types/mssql": "^12.3.0",
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",
+    "esbuild": "^0.28.1",
     "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "mssql": "^12.7.0"
   }
 }

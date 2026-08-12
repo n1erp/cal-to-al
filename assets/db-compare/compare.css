@@ -1,0 +1,217 @@
+:root {
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  height: 100vh;
+  overflow: hidden;
+}
+
+main.compare {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  flex-wrap: wrap;
+}
+
+.title-block h1 {
+  margin: 0;
+  font-size: 1.15em;
+}
+
+.subtitle {
+  display: block;
+  font-size: 0.85em;
+  opacity: 0.7;
+  white-space: pre-line;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
+}
+
+button {
+  background: var(--vscode-button-secondaryBackground, #3a3d41);
+  color: var(--vscode-button-secondaryForeground, #fff);
+  border: 1px solid var(--vscode-button-border, transparent);
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button.primary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+input[type='text'],
+select {
+  background: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border, transparent);
+  padding: 5px 8px;
+  border-radius: 3px;
+}
+
+.summary {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  flex-wrap: wrap;
+}
+
+.summary .card {
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 6px;
+  padding: 8px 16px;
+  min-width: 140px;
+}
+
+.summary .card .num {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+
+.summary .card .lbl {
+  font-size: 0.85em;
+  opacity: 0.75;
+}
+
+.card.ok .num { color: var(--vscode-testing-iconPassed, #73c991); }
+.card.warn .num { color: var(--vscode-editorWarning-foreground, #cca700); }
+.card.err .num { color: var(--vscode-errorForeground, #f48771); }
+
+.results {
+  flex: 1;
+  overflow: auto;
+  padding: 0 14px 14px;
+}
+
+.section-title {
+  margin: 16px 0 8px;
+  font-size: 1em;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.tbl-row {
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.tbl-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tbl-head:hover {
+  background: var(--vscode-list-hoverBackground);
+}
+
+.tbl-head .chev {
+  width: 14px;
+  opacity: 0.7;
+}
+
+.tbl-head .names {
+  font-weight: 600;
+}
+
+.tbl-head .meta {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.85em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 8px;
+  font-size: 0.8em;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+}
+
+.badge.ok { background: rgba(115, 201, 145, 0.2); color: var(--vscode-testing-iconPassed, #73c991); }
+.badge.warn { background: rgba(204, 167, 0, 0.18); color: var(--vscode-editorWarning-foreground, #cca700); }
+.badge.err { background: rgba(244, 135, 113, 0.18); color: var(--vscode-errorForeground, #f48771); }
+
+.tbl-detail {
+  border-top: 1px solid var(--vscode-panel-border);
+  padding: 8px 12px;
+}
+
+.tbl-detail table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88em;
+}
+
+.tbl-detail th,
+.tbl-detail td {
+  border: 1px solid var(--vscode-panel-border);
+  padding: 3px 8px;
+  text-align: left;
+}
+
+.tbl-detail thead th {
+  background: var(--vscode-editorGroupHeader-tabsBackground, #252526);
+}
+
+.actions .sep {
+  width: 1px;
+  height: 22px;
+  background: var(--vscode-panel-border);
+  margin: 0 4px;
+}
+
+.empty-state {
+  padding: 24px 14px;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.empty-state code {
+  font-size: 0.9em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.empty {
+  opacity: 0.6;
+  font-style: italic;
+  padding: 4px 0 12px;
+}

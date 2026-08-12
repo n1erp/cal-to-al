@@ -1,0 +1,31 @@
+<main class="compare">
+  <header class="toolbar">
+    <div class="title-block">
+      <h1 id="compareTitle">Database Comparison</h1>
+      <span id="compareSubtitle" class="subtitle">No comparison loaded.</span>
+    </div>
+    <div class="actions">
+      <input id="searchBox" type="text" placeholder="Filter tables…" />
+      <select id="sectionFilter">
+        <option value="all">All sections</option>
+        <option value="matched">Matched tables</option>
+        <option value="diffs">Matched with differences</option>
+        <option value="missing-dest">Tables added</option>
+        <option value="missing-src">Added in destination</option>
+      </select>
+      <span class="sep"></span>
+      <button id="btnOpenMigration" type="button" title="Open Migration Dashboard">Migration Dashboard</button>
+      <span class="sep"></span>
+      <button id="btnOpenFile" type="button" title="Open comparison JSON file">JSON</button>
+    </div>
+  </header>
+
+  <section id="summary" class="summary"></section>
+
+  <section id="emptyState" class="empty-state hidden">
+    No comparison loaded. Run <b>CAL to AL: Create Database Comparison</b> to scan two
+    databases and save <code>.cal2al/database-comparison.json</code>.
+  </section>
+
+  <section id="results" class="results"></section>
+</main>

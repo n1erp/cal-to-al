@@ -4,4 +4,3 @@ out/
 .vscodeignore
 package-lock.json
 dist
-*.vsix

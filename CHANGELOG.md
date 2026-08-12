@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.0.0] - 2026-08-12
+
+### ✨ Added — Data Migration Studio
+
+- **SQL Explorer** view in the Activity Bar: save multiple SQL Server connections (SQL auth and Windows/NTLM auth, passwords in Secret Storage) and browse databases → schemas → tables / views / stored procedures.
+- **Table preview** webview: paged data grid with search, per-column filters, column sorting, and a metadata tab (SQL type, BC type, nullable, identity, PK, FKs, defaults).
+- **Export table data** to CSV, Excel (`.xlsx`), and JSON with streaming for large tables.
+- **Database metadata scanner**: full structural model per database, enriched with NAV/BC metadata (BC table IDs, `DataPerCompany` detection, BC data types, keys, relationships, row counts).
+- **Database Comparison** panel: tables in both / missing / renamed (fuzzy best match) and per-field differences (SQL type, BC type, nullable, primary key).
+- **Smart Mapping Engine**: auto-match tables and fields by BC ID → name → fuzzy similarity, with manual include/exclude overrides in the dashboard (persisted to `.cal2al/mappings.json`).
+- **Migration query generator**: `INSERT INTO … SELECT` per mapped table with identity handling and a transformation-rule hook.
+- **Migration plan JSON** (`.cal2al/migration-plan.json`): one entry per table with query, estimated rows, status, timings, retry counters, and errors — written atomically on every change so it doubles as the execution log.
+- **Migration execution engine**: execute one / selected / all tables, resume pending, retry failed, and stop; transactions with rollback on failure; cross-server migrations via streamed batch bulk copy; logs in the **Data Migration** output channel.
+- **Migration Dashboard** webview: live status grid, progress bar, multi-select, SQL preview per row, field mapping editor, and HTML/CSV execution report export.
+- New settings: `dataMigration.batchSize`, `dataMigration.queryTimeoutSeconds`, `dataMigration.planFolder`.
+
+---
+
 ## [3.0.0] - 2026-07-06
 
 ### ✨ Added

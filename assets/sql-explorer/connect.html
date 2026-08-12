@@ -1,0 +1,66 @@
+<div class="connect-page">
+  <div class="ssms-dialog" role="dialog" aria-labelledby="dialogTitle">
+    <header class="title-bar">
+      <span class="title-icon" aria-hidden="true"></span>
+      <span class="title-text">Connect to Server</span>
+      <button type="button" id="btnClose" class="title-close" title="Close" aria-label="Close">&#x2715;</button>
+    </header>
+
+    <div class="dialog-body">
+      <h1 id="dialogTitle" class="brand">SQL Server</h1>
+      <div class="brand-rule" aria-hidden="true"></div>
+
+      <form id="connectForm" autocomplete="off">
+        <div class="form-grid">
+          <label for="connectionName"><span class="mnemonic">N</span>ame:</label>
+          <input id="connectionName" name="connectionName" type="text"
+            placeholder="Display name in SQL Explorer" spellcheck="false" disabled />
+
+          <label for="serverName"><span class="mnemonic">S</span>erver name:</label>
+          <div class="combo">
+            <input id="serverName" name="serverName" type="text" list="serverNameList"
+              placeholder="hostname\instance or hostname,port" required spellcheck="false" disabled />
+            <datalist id="serverNameList"></datalist>
+            <button type="button" id="btnRefreshServers" class="combo-btn" title="Refresh SQL Server instances" disabled>&#x21bb;</button>
+          </div>
+
+          <label for="port">TCP <span class="mnemonic">p</span>ort:</label>
+          <input id="port" name="port" type="text" inputmode="numeric"
+            placeholder="Optional — recommended for named instances" spellcheck="false" disabled />
+
+          <label for="authMode"><span class="mnemonic">A</span>uthentication:</label>
+          <select id="authMode" name="authMode" disabled>
+            <option value="sql">SQL Server Authentication</option>
+            <option value="ntlm">Windows Authentication</option>
+          </select>
+
+          <label for="login" class="indent"><span class="mnemonic">L</span>ogin:</label>
+          <input id="login" name="login" type="text" class="indent-field" spellcheck="false" required disabled />
+
+          <label for="password" class="indent"><span class="mnemonic">P</span>assword:</label>
+          <input id="password" name="password" type="password" class="indent-field" disabled />
+
+          <label for="domain" class="indent auth-ntlm">Doma<span class="mnemonic">i</span>n:</label>
+          <input id="domain" name="domain" type="text" class="indent-field auth-ntlm" spellcheck="false"
+            placeholder="Optional if login is DOMAIN\user" disabled />
+
+          <label for="encryptPreset"><span class="mnemonic">E</span>ncryption:</label>
+          <select id="encryptPreset" name="encryptPreset" disabled>
+            <option value="onprem" selected>On-premises (encrypt + trust certificate)</option>
+            <option value="azure">Encrypt, validate certificate</option>
+            <option value="none">No encryption (legacy)</option>
+          </select>
+        </div>
+
+        <p id="statusMessage" class="status is-busy" role="status" aria-live="polite">Looking for SQL Server instances…</p>
+      </form>
+    </div>
+
+    <footer class="dialog-footer">
+      <div class="footer-right">
+        <button type="button" id="btnConnect" class="btn btn-primary" disabled><span class="mnemonic">C</span>onnect</button>
+        <button type="button" id="btnCancel" class="btn">Cancel</button>
+      </div>
+    </footer>
+  </div>
+</div>

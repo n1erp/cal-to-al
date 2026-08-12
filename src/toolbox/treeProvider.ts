@@ -3,13 +3,19 @@ import {
   CMD_CAL_PRETTIER,
   CMD_DELTA_DETAILS,
   CMD_OPEN_WIZARD,
+  CMD_SQL_COMPARE_DATABASES,
+  CMD_SQL_OPEN_DASHBOARD,
+  CMD_SQL_OPEN_EXPLORER,
 } from '../constants';
 
 /** Stable ids for toolbox tree items (used as `contextValue`). */
 export type ToolboxActionId =
   | 'calPrettier'
   | 'conversionWizard'
-  | 'deltaDetails';
+  | 'deltaDetails'
+  | 'sqlExplorer'
+  | 'dbComparison'
+  | 'migrationDashboard';
 
 interface ToolboxAction {
   id: ToolboxActionId;
@@ -41,6 +47,27 @@ const TOOLBOX_ACTIONS: ToolboxAction[] = [
     tooltip: 'Compare old vs new object exports in the VS Code diff editor',
     command: CMD_DELTA_DETAILS,
     icon: 'diff',
+  },
+  {
+    id: 'sqlExplorer',
+    label: 'SQL Explorer',
+    tooltip: 'Browse SQL Server databases, tables, and preview data',
+    command: CMD_SQL_OPEN_EXPLORER,
+    icon: 'database',
+  },
+  {
+    id: 'dbComparison',
+    label: 'Database Comparison',
+    tooltip: 'Open the database comparison dashboard (loads .cal2al/database-comparison.json)',
+    command: CMD_SQL_COMPARE_DATABASES,
+    icon: 'compare-changes',
+  },
+  {
+    id: 'migrationDashboard',
+    label: 'Migration Dashboard',
+    tooltip: 'Execute and monitor data migration queries',
+    command: CMD_SQL_OPEN_DASHBOARD,
+    icon: 'rocket',
   },
 ];
 

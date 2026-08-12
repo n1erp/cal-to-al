@@ -1,0 +1,65 @@
+<main class="preview">
+  <header class="toolbar">
+    <div class="title-block">
+      <h1 id="tableTitle">Loading…</h1>
+      <span id="tableSubtitle" class="subtitle"></span>
+    </div>
+    <div class="tabs">
+      <button id="tabData" class="tab active" type="button">Data</button>
+      <button id="tabMeta" class="tab" type="button">Metadata</button>
+    </div>
+    <div class="actions">
+      <input id="searchBox" type="text" placeholder="Search text columns…" />
+      <button id="btnRefresh" type="button" title="Refresh">&#8635; Refresh</button>
+      <div class="export-group">
+        <button id="btnExportCsv" type="button">CSV</button>
+        <button id="btnExportXlsx" type="button">Excel</button>
+        <button id="btnExportJson" type="button">JSON</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="statusBar" class="status hidden"></div>
+
+  <section id="dataView" class="grid-wrap">
+    <table id="grid">
+      <thead id="gridHead"></thead>
+      <tbody id="gridBody"></tbody>
+    </table>
+  </section>
+
+  <section id="metaView" class="grid-wrap hidden">
+    <table id="metaGrid">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Field Name</th>
+          <th>SQL Type</th>
+          <th>BC Type</th>
+          <th>Nullable</th>
+          <th>Identity</th>
+          <th>PK</th>
+          <th>Foreign Key</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody id="metaBody"></tbody>
+    </table>
+    <div id="metaKeys" class="meta-keys"></div>
+  </section>
+
+  <footer class="pager">
+    <button id="btnFirst" type="button" title="First page">&#171;</button>
+    <button id="btnPrev" type="button" title="Previous page">&#8249;</button>
+    <span id="pageInfo">–</span>
+    <button id="btnNext" type="button" title="Next page">&#8250;</button>
+    <button id="btnLast" type="button" title="Last page">&#187;</button>
+    <select id="pageSize">
+      <option value="50">50 rows</option>
+      <option value="100" selected>100 rows</option>
+      <option value="250">250 rows</option>
+      <option value="500">500 rows</option>
+    </select>
+    <span id="rowTotal" class="total"></span>
+  </footer>
+</main>

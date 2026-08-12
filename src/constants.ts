@@ -10,6 +10,9 @@ export const CONFIG_NAMESPACE = 'calToAl';
 /** Toolbox TreeView id — must match `package.json` → `contributes.views`. */
 export const TOOLBOX_VIEW_ID = 'calToAl.toolbox';
 
+/** SQL Explorer TreeView id — must match `package.json` → `contributes.views`. */
+export const SQL_EXPLORER_VIEW_ID = 'calToAl.sqlExplorer';
+
 /** TextMate language id for NAV C/AL `.txt` exports (C/Side Prettier). */
 export const CSIDE_NAV_LANGUAGE_ID = 'cside-nav';
 
@@ -20,6 +23,34 @@ export const CMD_CAL_PRETTIER = 'calToAl.runCalPrettier';
 export const CMD_DELTA_DETAILS = 'calToAl.deltaDetails';
 /** Explorer context menu: convert selected `.txt` files or folders. */
 export const CMD_CONVERT_FROM_EXPLORER = 'calToAl.convertFromExplorer';
+
+// ── Data Migration Studio (v4) command ids ────────────────────────────────────
+
+export const CMD_SQL_OPEN_EXPLORER = 'calToAl.sql.openExplorer';
+export const CMD_SQL_ADD_CONNECTION = 'calToAl.sql.addConnection';
+export const CMD_SQL_EDIT_CONNECTION = 'calToAl.sql.editConnection';
+export const CMD_SQL_DELETE_CONNECTION = 'calToAl.sql.deleteConnection';
+export const CMD_SQL_REFRESH_EXPLORER = 'calToAl.sql.refreshExplorer';
+export const CMD_SQL_PREVIEW_TABLE = 'calToAl.sql.previewTable';
+export const CMD_SQL_EXPORT_TABLE = 'calToAl.sql.exportTable';
+export const CMD_SQL_COMPARE_DATABASES = 'calToAl.sql.compareDatabases';
+export const CMD_SQL_CREATE_COMPARISON = 'calToAl.sql.createDatabaseComparison';
+export const CMD_SQL_OPEN_DASHBOARD = 'calToAl.sql.openMigrationDashboard';
+export const CMD_SQL_CREATE_PLAN = 'calToAl.sql.createMigrationPlan';
+
+/** `dataMigration.*` settings keys. */
+export const MIGRATION_CONFIG_NAMESPACE = 'dataMigration';
+export const MIGRATION_SETTINGS = {
+  batchSize: 'batchSize',
+  queryTimeoutSeconds: 'queryTimeoutSeconds',
+  planFolder: 'planFolder',
+} as const;
+
+/** Workspace-relative folder for migration artifacts (plan + mappings). */
+export const MIGRATION_DIR = '.cal2al';
+export const MIGRATION_PLAN_FILE = 'migration-plan.json';
+export const MIGRATION_MAPPINGS_FILE = 'mappings.json';
+export const MIGRATION_COMPARISON_FILE = 'database-comparison.json';
 
 // ── Bundled tool file names ───────────────────────────────────────────────────
 

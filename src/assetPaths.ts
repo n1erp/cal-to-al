@@ -18,6 +18,30 @@ export const AssetPaths = {
     css: 'assets/conversion-wizard/wizard.css',
     js: 'assets/conversion-wizard/wizard.js',
   },
+  sqlExplorer: {
+    folder: 'assets/sql-explorer',
+    html: 'assets/sql-explorer/preview.html',
+    css: 'assets/sql-explorer/preview.css',
+    js: 'assets/sql-explorer/preview.js',
+  },
+  sqlConnect: {
+    folder: 'assets/sql-explorer',
+    html: 'assets/sql-explorer/connect.html',
+    css: 'assets/sql-explorer/connect.css',
+    js: 'assets/sql-explorer/connect.js',
+  },
+  dbCompare: {
+    folder: 'assets/db-compare',
+    html: 'assets/db-compare/compare.html',
+    css: 'assets/db-compare/compare.css',
+    js: 'assets/db-compare/compare.js',
+  },
+  migrationDashboard: {
+    folder: 'assets/migration-dashboard',
+    html: 'assets/migration-dashboard/dashboard.html',
+    css: 'assets/migration-dashboard/dashboard.css',
+    js: 'assets/migration-dashboard/dashboard.js',
+  },
 } as const;
 
 /**

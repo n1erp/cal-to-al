@@ -1,0 +1,67 @@
+<main class="dashboard">
+  <header class="toolbar">
+    <div class="title-block">
+      <h1>Migration Dashboard</h1>
+      <span id="planInfo" class="subtitle">No migration plan loaded.</span>
+    </div>
+    <div class="actions">
+      <button id="btnExecuteSelected" type="button" class="primary" title="Execute selected tables">&#9654; Execute Selected</button>
+      <button id="btnExecuteAll" type="button" title="Execute all pending tables">&#9654; Execute All</button>
+      <button id="btnRetryFailed" type="button" title="Retry failed tables">&#8635; Retry Failed</button>
+      <button id="btnStop" type="button" class="danger" title="Stop execution" disabled>&#9208; Stop</button>
+      <span class="sep"></span>
+      <button id="btnCreatePlan" type="button" title="Create migration plan from saved comparison">Create Migration Plan</button>
+      <button id="btnOpenCompare" type="button" title="Open database comparison">Database comparison</button>
+      <span class="sep"></span>
+      <button id="btnExport" type="button" title="Export execution report">&#128196; Export Report</button>
+    </div>
+  </header>
+
+  <div id="workflowBanner" class="workflow-banner hidden"></div>
+
+  <div class="progress-wrap">
+    <div class="progress-labels">
+      <span id="progressText"></span>
+      <span id="runningText"></span>
+    </div>
+    <div class="progress-bar"><div id="progressFill"></div></div>
+  </div>
+
+  <div class="filter-bar">
+    <input id="searchBox" type="text" placeholder="Search tables…" />
+    <select id="statusFilter">
+      <option value="all">All statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="Running">Running</option>
+      <option value="Completed">Completed</option>
+      <option value="Failed">Failed</option>
+      <option value="Stopped">Stopped</option>
+    </select>
+    <span id="selectionInfo" class="selection-info"></span>
+  </div>
+
+  <section class="grid-wrap">
+    <table id="grid">
+      <thead>
+        <tr>
+          <th class="chk"><input id="chkAll" type="checkbox" /></th>
+          <th class="expand"></th>
+          <th data-sort="status">Status</th>
+          <th data-sort="table_src">Source Table</th>
+          <th data-sort="table_trgt">Destination Table</th>
+          <th data-sort="mapping_complete">Schema Match</th>
+          <th data-sort="rows" class="num">Est. Rows</th>
+          <th data-sort="executed_rows" class="num">Executed Rows</th>
+          <th data-sort="duration_ms" class="num">Duration</th>
+          <th data-sort="retry_count" class="num">Retries</th>
+          <th data-sort="error_message">Last Error</th>
+        </tr>
+      </thead>
+      <tbody id="gridBody"></tbody>
+    </table>
+    <div id="emptyState" class="empty hidden">
+      <p id="emptyLead" class="empty-lead"></p>
+      <div id="emptyActions" class="empty-actions"></div>
+    </div>
+  </section>
+</main>
